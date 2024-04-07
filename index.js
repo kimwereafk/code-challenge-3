@@ -28,13 +28,12 @@ let URL = 'https://project-code-challenge-3.vercel.app/db.json'
  //function to display the titles of the movies as a list 
  function displayMovie(movie){ 
      const list = document.createElement('li') 
-     list.style.cursor="cell" 
+     list.style.cursor = "pointer" 
      list.style.fontFamily = "Arial, sans-serif"
      list.textContent= (movie.title) 
      listHolder.appendChild(list) 
      addClickEvent() 
  } 
- //Adding the click event listener 
  //Adding the click event listener 
 function addClickEvent(){ 
     let children = listHolder.children; 
@@ -63,7 +62,6 @@ function addClickEvent(){
     }
 }
 
- //Posting movie details 
  // poster to be dispalyed on the div with poster id 
  function setUpMovieDetails(funMovie){ 
      const preview = document.getElementById('poster') 
