@@ -83,6 +83,7 @@ function addClickEvent(){
      // available tickets =capacity - tickets sold 
      const tickets  = document.querySelector('#ticket-number') 
      tickets.textContent = funMovie.capacity -funMovie.tickets_sold; 
+     tickets.style.fontFamily = "Arial, sans-serif";
  } 
  // //Sold out 
  const btn = document.getElementById('buy-ticket');
