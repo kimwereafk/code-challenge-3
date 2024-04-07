@@ -29,26 +29,40 @@ let URL = 'https://project-code-challenge-3.vercel.app/db.json'
  function displayMovie(movie){ 
      const list = document.createElement('li') 
      list.style.cursor="cell" 
+     list.style.fontFamily = "Arial, sans-serif"
      list.textContent= (movie.title) 
      listHolder.appendChild(list) 
      addClickEvent() 
  } 
  //Adding the click event listener 
- function addClickEvent(){ 
-     let children=listHolder.children 
-     for(let i=0; i<children.length; i++){ 
-         let child=children[i] 
-         // console.log(child) <= to check if have the right child 
-         child.addEventListener('click',() => { 
-             fetch(`${URL}`) 
-             .then(res => res.json()) 
-             .then(movie => { 
-                 document.getElementById('buy-ticket').textContent = 'Buy Ticket' 
-                 setUpMovieDetails(movie.films[i]) 
-             }) 
-         }) 
-     } 
- } 
+ //Adding the click event listener 
+function addClickEvent(){ 
+    let children = listHolder.children; 
+    for(let i = 0; i < children.length; i++){ 
+        let child = children[i]; 
+        child.addEventListener('click', () => { 
+            fetch(URL)
+            .then(res => res.json())
+            .then(movie => {
+                const remainingTickets = parseInt(movie.films[i].capacity) - parseInt(movie.films[i].tickets_sold);
+                const btn = document.getElementById('buy-ticket');
+                
+                document.getElementById('buy-ticket').textContent = 'Buy Ticket';
+
+                setUpMovieDetails(movie.films[i]);
+
+                if (remainingTickets === 0) {
+                    btn.textContent = 'Sold Out'; // Change button text to "Sold Out"
+                    btn.disabled = true; // Disable the button to prevent further clicks
+                } else {
+                    btn.textContent = 'Buy Ticket'; // Reset button text to "Buy Ticket"
+                    btn.disabled = false; // Enable the button
+                }
+            });
+        });
+    }
+}
+
  //Posting movie details 
  // poster to be dispalyed on the div with poster id 
  function setUpMovieDetails(funMovie){ 
@@ -71,14 +85,17 @@ let URL = 'https://project-code-challenge-3.vercel.app/db.json'
      tickets.textContent = funMovie.capacity -funMovie.tickets_sold; 
  } 
  // //Sold out 
- const btn = document.getElementById('buy-ticket') 
-         btn.addEventListener('click', function(event){ 
-             let remainingTickets = document.querySelector('#ticket-number').textContent 
-             event.preventDefault() 
-             if(remainingTickets > 0){ 
-                 document.querySelector('#ticket-number').textContent  = remainingTickets-1 
-             } 
-             else if(parseInt(remTickets, 10)===0){ 
-                 btn.textContent = 'Sold Out' 
-             } 
-     })
+ const btn = document.getElementById('buy-ticket');
+ btn.addEventListener('click', function(event) {
+     let remainingTickets = parseInt(document.querySelector('#ticket-number').textContent);
+     event.preventDefault();
+     
+     if (remainingTickets > 0) {
+         document.querySelector('#ticket-number').textContent = remainingTickets - 1;
+         if (remainingTickets - 1 === 0) { // Check if tickets are sold out after decrementing
+             btn.textContent = 'Sold Out'; // Change button text to "Sold Out"
+             btn.disabled = true; // Disable the button to prevent further clicks
+         }
+     }
+ });
+ 
